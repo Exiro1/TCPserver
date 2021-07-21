@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class Main {
 
-    static final int PORT = 11000;
+    static int PORT = 11000;
 
     static public Raspberry rasp;
     static ArrayList<Client> clients;
@@ -17,6 +17,8 @@ public class Main {
 
     public static void main(String args[]){
         clients = new ArrayList<>();
+        if(args.length>0)
+            PORT = Integer.parseInt(args[0]);
         startServer();
     }
 
