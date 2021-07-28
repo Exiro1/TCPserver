@@ -75,12 +75,15 @@ public class Client  extends Thread {
             }
             if(Main.dataLen>0)
                 writeData(Main.lastData,Main.dataLen);
+            byte[] data = new byte[32];
             do {  // boucle quasi-infini d'écoute
-                text = reader.readLine();
-                if(Main.rasp != null){
-                    Main.rasp.writeString(text);
+                int len = in.read(data);
+                if(len>0) {
+                    if(Main.rasp != null){
+                        Main.rasp.writeData(data, len);
+                    }
                 }
-            } while (!text.equals("END"));
+            } while (!(data[0] == 'E' && data[1] == 'N' &&data[2] == 'D'));
             System.out.println("Client disconnected");
             socket.close();
         } catch (IOException ex) {
