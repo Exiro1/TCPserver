@@ -16,6 +16,26 @@ public class Raspberry extends Client{
     }
     volatile boolean stop = false;
 
+    public void writeToFile(byte[] data, int len){
+
+        try{
+            BufferedWriter out = new BufferedWriter(new FileWriter(Main.filename, true));
+            StringBuilder sb = new StringBuilder();
+            for(int i=0;i<len;i++){
+                int v = data[i] < 0 ? data[i] + 256 : data[i];
+                sb.append(v+",");
+            }
+            sb.deleteCharAt(sb.lastIndexOf(","));
+            sb.append('\n');
+            out.write(sb.toString());
+            out.close();
+        }catch(IOException e){
+
+        }
+
+    }
+
+
     @Override
     public void run() {
         try {
@@ -30,6 +50,8 @@ public class Raspberry extends Client{
                     Main.writeToAllClient(data,len);
                     Main.lastData = data;
                     Main.dataLen = len;
+                    writeToFile(data, len);
+
                     //si les données contiennent "END"alors on ferme la connexion
                     if(len==3) {
                       if(data[0] == 'E' && data[1]=='N' && data[2] == 'D'){

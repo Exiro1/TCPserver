@@ -1,9 +1,12 @@
 package fr.exiro.TCPserver;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Main {
 
@@ -15,8 +18,17 @@ public class Main {
     static byte[] lastData;
     static int dataLen=0;
 
+    static String filename;
+
     public static void main(String args[]){
         clients = new ArrayList<>();
+        filename  ="datalog_" + new SimpleDateFormat("hh-mm-ss").format(new Date())+ ".csv";
+        File nf = new File(filename);
+        try {
+            nf.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         if(args.length>0)
             PORT = Integer.parseInt(args[0]);
         startServer();
